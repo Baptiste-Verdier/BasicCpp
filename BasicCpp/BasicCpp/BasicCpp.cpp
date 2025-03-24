@@ -9,24 +9,103 @@ using std::cout;
 using std::cin;
 using std::string;
 using std::map;
-void lineBreak() { cout << "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n"; }
+void lineBreak() { cout << "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n"; }
 
-int attackBasic() 
+int attackBasic(int dodgeChance) 
 {
-    return (rand() % 3) + 1;
+    if ((rand() % 100) + 1 >= dodgeChance)
+    {
+        cout << "The beast has struck you !";
+        return (rand() % 5) + 1;
+    }
+    else { cout << "You avoid the beasts fang"; return 0; }
+    
 }
 
-bool isPoisoned(int poisonChance)
+bool poisonning(int poisonChance)
 {
     if ((rand()%100)+1 <= poisonChance)
         {
+            cout << "The target has been successfully poisoned";
             return true;
         } 
-    else {return false;} 
+    else {cout << "You failed to poison the target" ; return false; }
 }
+
+int weaken(int poisonChance) 
+{
+    poisonChance += rand() % 30 + 11;
+    return poisonChance;
+}
+
+
 int main()
 {
+    // MAIN PROJECT
     srand(time(NULL));
+    int poisonChance = 10;
+    int poisonDamage = 1;
+    int playerLife = 20;
+    int wolfLife = 20;
+    int choice = 0;
+    int dodgeChance = 10;
+    bool isPoisonned = false;
+
+    cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
+    lineBreak();
+    while (wolfLife >= 0 && playerLife >= 0)
+    {
+        dodgeChance = 10;
+        cout << "You have " << playerLife << " life remaining\n";
+        cout << "The wolf has " << wolfLife << " life remaining\n";
+        cout << "Your poison has a potency of " << poisonDamage << "\n";
+        if (!isPoisonned) { cout << "The beast has a " << poisonChance << "% chance of being poisoned\n"; }
+        cout << "The beast is "; if (!isPoisonned) { cout << "NOT "; } cout << "poisonned\n";
+        lineBreak();
+
+        cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n4 - Dodge ?\n";
+        do {
+            cin >> choice;
+            switch (choice)
+            {
+            case 1:
+                lineBreak();
+                isPoisonned = poisonning(poisonChance);
+                cout << "\n";
+                break;
+            case 2:
+                lineBreak();
+               cout<<"You increase the chance of your poison taking hold\n";
+               poisonChance = weaken(poisonChance);
+                cout << "\n";
+                break;
+            case 3:
+                lineBreak();
+                poisonDamage++;
+                cout << "Your poison will kill the beast faster !\n";
+                break;
+            case 4:
+                lineBreak();
+                dodgeChance += 65;
+                cout << "You decrease the chance of the beast striking you\n";
+                break;
+            default:
+                cout << "Try again PUNK \n";
+                choice = 0;
+            }
+        } while (choice == 0);
+
+        playerLife -= attackBasic(dodgeChance);
+        if (isPoisonned) {wolfLife -= poisonDamage;}
+        lineBreak();
+    }
+
+    if (wolfLife <= 0) { cout << "You're victorious !"; }
+    else if (playerLife <= 0) { cout << "Oupsy, you died"; }
+
+    return 0;
+
+    // EXERCISES
    /* string narratorName = "The Great";
 
     cout << "Hello, I am " + narratorName + "\n";
@@ -96,27 +175,10 @@ int main()
     //    }
     //} while (choice == 0);
 
-    int poisonChance = 0;
-    int playerLife = 25;
-    int wolfLife = 25;
-
-    cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
-    lineBreak();
-    while (wolfLife >= 0 || playerLife >= 0) 
-    {
-        cout << "You have " << playerLife << " life remaining\n";
-        cout << "The wolf has " << wolfLife << " life remaining\n";
-
-        playerLife -= attackBasic();
-        wolfLife -= attackBasic();
-
-        lineBreak();
-    }
-    if (wolfLife <= 0) { cout << "You're victorious !"; }
-    else if (playerLife <= 0) { cout << "Oupsy, you died"; }
-
-    return 0;
+  
 }
+
+
 
 
 
