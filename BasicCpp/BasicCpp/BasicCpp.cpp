@@ -2,10 +2,37 @@
 //
 
 #include <iostream>
+#include <string>
+#include <vector>
+using std::cout;
+using std::cin;
+using std::string;
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    srand(time(NULL));
+    string narratorName = "The Great";
+
+    cout << "Hello, I am " + narratorName + "\n";
+    cout << "What is your name ? \n";
+
+    string adventurerName = "John";
+    cin >> adventurerName;
+    string* pAdventurerName = &adventurerName;
+
+    cout << "Nice to meet you " << adventurerName << "!\nLet's check see if you're strong\n";
+    int strengthDice = (std::rand() % 6) + 1;
+    cout << "You have a strength of " << strengthDice << " ! Impressive\n ";
+    cout << "Let's check your equipment \n";
+
+   std:: vector<string> inventory = { "an axe", "an apple" };
+    cout << "You have " << inventory[0] << " and " << inventory[1] << "\n There is something at the bottom \n";
+    inventory.push_back("book"); 
+    cout << "It was a " << inventory[inventory.size() - 1] << "! \n";
+
+
+
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
