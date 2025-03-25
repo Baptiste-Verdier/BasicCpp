@@ -128,6 +128,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasicCpp.cpp" />
+    <ClCompile Include="BodyPart.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BodyPart.h" />
+    <ClInclude Include="Enum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
