@@ -1,60 +1,51 @@
 // BasicCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
+#include "BodyPart.h";
 using std::cout;
 using std::cin;
 using std::string;
 using std::map;
-void lineBreak() { cout << "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n"; }
 
-int attackBasic(int dodgeChance) 
-{
-    if ((rand() % 100) + 1 >= dodgeChance)
-    {
-        cout << "The beast has struck you !";
-        return (rand() % 5) + 1;
-    }
-    else { cout << "You avoid the beasts fang"; return 0; }
-    
-}
 
-bool poisonning(int poisonChance)
-{
-    if ((rand()%100)+1 <= poisonChance)
-        {
-            cout << "The target has been successfully poisoned";
-            return true;
-        } 
-    else {cout << "You failed to poison the target" ; return false; }
-}
 
-int weaken(int poisonChance) 
+#pragma region fonctions
+
+void lineBreak() { cout << "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n"; } 
+
+int weaken(int poisonChance) //Tu augmentes tes chances d'empoisoner la cible avec succès.
 {
     poisonChance += rand() % 30 + 11;
     return poisonChance;
 }
+#pragma endregion
+
+
 
 
 int main()
 {
     // MAIN PROJECT
     srand(time(NULL));
-    int poisonChance = 10;
-    int poisonDamage = 1;
+    int poisonChance = 10; //Chance d'empoisonner la cible
+    int poisonDamage = 1; //Dégât qu'une cible empoisonner subit chaque tour
     int playerLife = 20;
     int wolfLife = 20;
-    int choice = 0;
-    int dodgeChance = 10;
-    bool isPoisonned = false;
+    int choice = 0; //La variable utilisé pour naviguer le switch
+    int dodgeChance = 10; //La chance d'éviter les attaques de l'ennemi
+    bool isPoisonned = false; //Est ce que la cible est empoisonné ou non ?
 
     cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
     lineBreak();
-    while (wolfLife >= 0 && playerLife >= 0)
+    while (wolfLife >= 0 && playerLife >= 0) //Tant que l'un de vous est vivant
     {
+
+#pragma region turnStart 
+        //Toute les infos utiles au joueur
+        /*system("cls");*/
         dodgeChance = 10;
         cout << "You have " << playerLife << " life remaining\n";
         cout << "The wolf has " << wolfLife << " life remaining\n";
@@ -62,11 +53,14 @@ int main()
         if (!isPoisonned) { cout << "The beast has a " << poisonChance << "% chance of being poisoned\n"; }
         cout << "The beast is "; if (!isPoisonned) { cout << "NOT "; } cout << "poisonned\n";
         lineBreak();
+#pragma endregion
 
-        cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n4 - Dodge ?\n";
+        
+#pragma region yourTurn
+     cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n4 - Dodge ?\n";
         do {
             cin >> choice;
-            switch (choice)
+            switch (choice) //Le switch qui détermine ce que tu fais pendant ton tour
             {
             case 1:
                 lineBreak();
@@ -94,9 +88,15 @@ int main()
                 choice = 0;
             }
         } while (choice == 0);
+#pragma endregion
 
+   
+#pragma region enemyTurn
         playerLife -= attackBasic(dodgeChance);
         if (isPoisonned) {wolfLife -= poisonDamage;}
+#pragma endregion
+
+        
         lineBreak();
     }
 
@@ -105,7 +105,8 @@ int main()
 
     return 0;
 
-    // EXERCISES
+#pragma region Exercices
+ // EXERCISES
    /* string narratorName = "The Great";
 
     cout << "Hello, I am " + narratorName + "\n";
@@ -175,7 +176,7 @@ int main()
     //    }
     //} while (choice == 0);
 
-  
+#pragma endregion
 }
 
 
