@@ -17,10 +17,9 @@ using std::map;
 
 void lineBreak() { cout << "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n\n"; } 
 
-int weaken(int poisonChance) //Tu augmentes tes chances d'empoisoner la cible avec succès.
+int weaken() //Tu augmentes tes chances d'empoisoner la cible avec succès.
 {
-    poisonChance += rand() % 30 + 11;
-    return poisonChance;
+    return  rand() % 20 + 3;
 }
 #pragma endregion
 
@@ -28,96 +27,79 @@ int weaken(int poisonChance) //Tu augmentes tes chances d'empoisoner la cible av
 
 int main()
 {
-#pragma region MyRegion
-// MAIN PROJECT
+#pragma region MAIN PROJECT
     srand(time(NULL));
-    
-    int poisonChance = 10; //Chance d'empoisonner la cible
+   
     int poisonDamage = 1; //Dégât qu'une cible empoisonner subit chaque tour
-    int playerLife = 20;
-    int wolfLife = 20;
+    int playerLife = 50;
     int choice = 0; //La variable utilisé pour naviguer le switch
-    int dodgeChance = 10; //La chance d'éviter les attaques de l'ennemi
+    int dodgeChance = 50; //La chance d'éviter les attaques de l'ennemi
    
 
     //CLASS OBJECT
     BodyPart dog;
-    dog.displayInfo(dodgeChance);
-    lineBreak();
-    dog.displayInfo(dodgeChance);
-    lineBreak();
-    dog.displayInfo(dodgeChance);
-    lineBreak();
-    dog.displayInfo(dodgeChance);
-    lineBreak();
-    dog.displayInfo(dodgeChance);
-    lineBreak();
 
 
-//    cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
-//    lineBreak();
-//    while (wolfLife >= 0 && playerLife >= 0) //Tant que l'un de vous est vivant
-//    {
-//
-//#pragma region turnStart 
-//        //Toute les infos utiles au joueur
-//        /*system("cls");*/
-//        dodgeChance = 10;
-//        cout << "You have " << playerLife << " life remaining\n";
-//        cout << "The wolf has " << wolfLife << " life remaining\n";
-//        cout << "Your poison has a potency of " << poisonDamage << "\n";
-//        if (!dog::isPoisonned) { cout << "The beast has a " << poisonChance << "% chance of being poisoned\n"; }
-//        cout << "The beast is "; if (!isPoisonned) { cout << "NOT "; } cout << "poisonned\n";
-//        lineBreak();
-//#pragma endregion
-//
-//        
-//#pragma region yourTurn
-//     cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n4 - Dodge ?\n";
-//        do {
-//            cin >> choice;
-//            switch (choice) //Le switch qui détermine ce que tu fais pendant ton tour
-//            {
-//            case 1:
-//                lineBreak();
-//                isPoisonned = poisonning(poisonChance);
-//                cout << "\n";
-//                break;
-//            case 2:
-//                lineBreak();
-//               cout<<"You increase the chance of your poison taking hold\n";
-//               poisonChance = weaken(poisonChance);
-//                cout << "\n";
-//                break;
-//            case 3:
-//                lineBreak();
-//                poisonDamage++;
-//                cout << "Your poison will kill the beast faster !\n";
-//                break;
-//            case 4:
-//                lineBreak();
-//                dodgeChance += 65;
-//                cout << "You decrease the chance of the beast striking you\n";
-//                break;
-//            default:
-//                cout << "Try again PUNK \n";
-//                choice = 0;
-//            }
-//        } while (choice == 0);
-//#pragma endregion
-//
-//   
-//#pragma region enemyTurn
-//        playerLife -= attackBasic(dodgeChance);
-//        if (isPoisonned) {wolfLife -= poisonDamage;}
-//#pragma endregion
-//
-//        
-//        lineBreak();
-//    }
-//
-//    if (wolfLife <= 0) { cout << "You're victorious !"; }
-//    else if (playerLife <= 0) { cout << "Oupsy, you died"; }
+
+    cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
+    lineBreak();
+    while (dog.mLife > 0 && playerLife > 0) //Tant que l'un de vous est vivant
+    {
+    #pragma region turnStart 
+       
+        if (dog.mIsPoisoned) { dog.mLife -= dog.poisonStatus(poisonDamage); }
+        dodgeChance = 0;
+        cout << "You have " << playerLife << " life remaining\n";
+        cout << "Your poison has a potency of " << poisonDamage << "\n";
+        lineBreak();
+#pragma endregion
+#pragma region yourTurn
+        cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n4 - Dodge ?\n5 - Check the beast's statue\n";
+        do {
+            cin >> choice;
+            switch (choice) //Le switch qui détermine ce que tu fais pendant ton tour
+            {
+            case 1:
+                lineBreak();
+                dog.mLife -= dog.poisonStatus(poisonDamage);
+                cout << "\n";
+                break;
+            case 2:
+                lineBreak();
+               cout<<"You increase the chance of your poison taking hold\n";
+                dog.mPoisonResistance -= weaken();
+                cout << "\n";
+                break;
+            case 3:
+                lineBreak();
+                poisonDamage++;
+                cout << "Your poison will kill the beast faster !\n";
+                break;
+            case 4:
+                lineBreak();
+                dodgeChance += 65;
+                cout << "You decrease the chance of the beast striking you\n";
+                break;
+            case 5:
+                lineBreak();
+                dog.displayInfo(dodgeChance);
+                choice = 0;
+
+            default:
+                cout << "What will you do ? \n1 - Attempt to poison the beast ? \n2 - Lower the beast resistance ? \n3 - Increase your poison's potency ? \n4 - Dodge ?\n5 - Check the beast's statue\n";
+                choice = 0;
+            }
+        } while (choice == 0);
+#pragma endregion   
+#pragma region enemyTurn
+        playerLife -= dog.attackBasic(dodgeChance);
+#pragma endregion
+        
+        lineBreak();
+    }
+
+    if (dog.mLife <= 0) { cout << "You're victorious !"; }
+    else if (playerLife <= 0) { cout << "Oupsy, you died"; }
 
 #pragma endregion
 

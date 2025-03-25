@@ -5,44 +5,43 @@
 using std::cout;
 
 BodyPart::BodyPart() :
-    mName{"Dog"},
+    mName{ "Dog" },
     mPoisonResistance{ 50 },
     mAttackMod{ 1 },
-    mHealingChance{ 10 },
     mAttackChance{ 50 },
     mIsPoisoned{ false },
-    mMaxLife(10) {
-    mLife = mMaxLife;}
+    mHealingChance{ 10 },
+    mMaxLife(10) {mLife = mMaxLife;}
+    
    
-int BodyPart::numberKilled{ 1 };
-
-int BodyPart::attackBasic(int dodgeChance, int attackMod, int attackChance) const
+int BodyPart::attackBasic(int dodgeChance) const
 {
-    if ( attackChance - dodgeChance <= 0) 
+    if ( mAttackChance - dodgeChance <= 0) 
     {
         cout << "You avoid the beasts fang"; return 0;
        
     }
-    else if ((rand() % 100) + 1 >= attackChance - dodgeChance)
+    else if ((rand() % 100) + 1 >= mAttackChance - dodgeChance)
     {
         cout << "The beast has struck you !";
-        return (rand() % 5) + 1 + attackMod;
+        return (rand() % 5) + 1 + mAttackMod;
     }
     else { cout << "You avoid the beasts fang"; return 0; }
 }
 
-int BodyPart::poisonStatus(int poisonResistance, int poisonDamage, bool isPoisoned, int healingChance) 
+int BodyPart::poisonStatus( int poisonDamage) 
 {
-    if (isPoisoned || (rand() % 100) + 1 >= poisonResistance)
+    if (mIsPoisoned || (rand() % 100) + 1 >= mPoisonResistance)
     {
         cout << "The target suffers from poisoning\n";
-        isPoisoned = true;
-        if (rand() % 100 + 1 <= healingChance) 
+        mIsPoisoned = true;
+        if (rand() % 100 + 1 <= mHealingChance) 
             {
             cout << "But heals from the poison afterwards";
-            isPoisoned = false;
+            mHealingChance = 10;
+            mIsPoisoned = false;
             }
-        else { healingChance += 15; }
+        else { mHealingChance += 5; }
         return poisonDamage;
     }
     else { cout << "You failed to poison the target"; return 0; }
@@ -54,8 +53,7 @@ void BodyPart::displayInfo(int dodgeChance) const
     cout << "It has " << mLife <<" hit points remaining" << "\n";
     cout << "It has a "; if (mAttackChance - dodgeChance <= 0) { cout << 0; } else { cout << mAttackChance - dodgeChance; } cout <<"% chance to hit you\n";
     cout << "It can deal between " <<mAttackMod << " and " << mAttackMod +5 << " damage\n";
-    cout << numberKilled << "\n";
-    numberKilled++;
+
     if (mIsPoisoned) 
     { 
         cout << "It has a " << mHealingChance << "% to cure itself from the poison next turn\n";

@@ -13,15 +13,15 @@ BodyPart();
 	string mName;
 	int mPoisonResistance;
 	int mLife;
-	int  mMaxLife;
+	int const  mMaxLife;
 	int mAttackMod;
-	int mHealingChance;
+	int  mHealingChance;
 	int mAttackChance;
 	bool mIsPoisoned;
-	static int numberKilled;
 
-int attackBasic(int dodgeChance, int attackMod, int attackChance) const;
-int poisonStatus(int poisonResistance, int poisonDamage, bool isPoisoned, int healingChance);
+
+int attackBasic(int dodgeChance) const;
+int poisonStatus(int poisonDamage);
 void displayInfo(int dodgeChance) const;
 
 };
