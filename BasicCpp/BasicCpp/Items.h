@@ -7,7 +7,7 @@ public :
 	Items();
 	Items(string name, int price);
 	string mName;
-
+	virtual ~Items();
 private :
 	int const mPrice;
 };

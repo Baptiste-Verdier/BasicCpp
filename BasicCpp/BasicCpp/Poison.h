@@ -13,6 +13,7 @@ public :
 	int   mPoisonDamage;
 	int const mPoisonChance;
 	string mType;
+	
 
 };
 

@@ -129,12 +129,14 @@
   <ItemGroup>
     <ClCompile Include="BasicCpp.cpp" />
     <ClCompile Include="BodyPart.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Poison.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BodyPart.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Poison.h" />
   </ItemGroup>

@@ -9,7 +9,7 @@ private :
 	
 	int const mMaxLife;
 	int mAttackMod;
-	int const mBaseHealingChance;
+	static int const mBaseHealingChance;
 	int mHealingChance;
 	int mAttackChance;
 

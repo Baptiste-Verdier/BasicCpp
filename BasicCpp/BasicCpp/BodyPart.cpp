@@ -7,10 +7,11 @@ using std::cout;
 
 
 
+int const BodyPart::mBaseHealingChance = 10;
 
 BodyPart::BodyPart(string name, int poisonResistance, int maxLife, int attackMod, int attackChance) :
     
-    mBaseHealingChance{ 10 },
+    
     mName{ name },
     mPoisonResistance{ poisonResistance },
     mMaxLife{ maxLife },
@@ -23,8 +24,12 @@ BodyPart::BodyPart(string name, int poisonResistance, int maxLife, int attackMod
     mHealingChance = mBaseHealingChance;
 }
 BodyPart::BodyPart() :
-   
-    mBaseHealingChance{10},
+    mName{ "default" },
+    mPoisonResistance{75},
+    mAttackMod{1},
+    mAttackChance{50},
+    mIsPoisoned{ false },
+    mCanPlay{ true },
     mMaxLife{30}
 {
     mLife = mMaxLife;

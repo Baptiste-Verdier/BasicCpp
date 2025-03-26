@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <vector>
-#include "BodyPart.h";
+#include "BodyPart.h"
 #include "Poison.h"
-#include "Enum.h";
+#include "Enum.h"
+#include "Inventory.h"
 
 using std::cout;
 using std::cin;
@@ -25,9 +25,23 @@ int weaken() //Tu augmentes tes chances d'empoisoner la cible avec succès.
 {
     return  rand() % 20 + 3;
 }
+
+int partSelection(vector<BodyPart> body)
+{
+    int choice = -5;
+    int option = 1;
+    while (choice = -5) {
+        for (BodyPart part : body)
+        {
+            cout << "\n" << option << " - " << part.mName << "\n";
+            option++;
+        }
+        cin >> choice;
+        if (choice - 1 <= body.size() && choice >= 0) { return choice - 1; }
+        else { choice = -5; }
+    }
+}
 #pragma endregion
-
-
 
 int main()
 {
@@ -41,51 +55,61 @@ int main()
    
 
     //CLASS OBJECT
+    Inventory inventory;
     BodyPart leftArm("left arm", 75,20,3,75);
+    BodyPart rightArm("right arm", 75, 20, 3, 75);
     Poison basePoison("Poison Basique", 1, 100,10, "None");
     Poison paralysingPoison("Poison Paralysant", 0, 75,10, "Paralysis");
     Items apple("apple", 10);
-    vector<Items> inventory;
+    Items wrong("wrong", 10);
+    vector<BodyPart> body{ leftArm, rightArm };
+    int partSelected;
+    
 
-    inventory.push_back(apple);
-    inventory.push_back(basePoison);
-    inventory.push_back(paralysingPoison);
-    Poison selected[]{ paralysingPoison };
+    inventory.mItems.push_back(apple);
+    inventory.mItems.push_back(wrong);
+    inventory.mItems.push_back(basePoison);
+    inventory.mItems.push_back(paralysingPoison);
+    Poison poisonSelect[]{ basePoison };
 
     cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
     lineBreak();
+    
     while (leftArm.mLife > 0 && playerLife > 0) //Tant que l'un de vous est vivant
     {
     #pragma region turnStart 
-       
-        if (leftArm.mIsPoisoned) { leftArm.mLife -= leftArm.poisonStatus(selected[0]); }
-       
+        for (BodyPart part : body)
+        {
+            if (part.mIsPoisoned) { part.mLife -= part.poisonStatus(poisonSelect[1]); }
+        }
         cout << "You have " << playerLife << " life remaining\n";
-        cout << "Your poison has a potency of " << selected[0].mPoisonDamage << "\n";
+        cout << "Your poison has a potency of " << poisonSelect[0].mPoisonDamage << "\n";
         lineBreak();
 #pragma endregion
 #pragma region yourTurn
         dodgeChance = 0;
-        cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n";
-        cout << "4 - Dodge ?\n5 - Check the beast's statue\n6 - Change Poison";
+        cout << "What will you do ?\n1 - Attempt to poison one of the beast's part\n2 - Lower one of the beast's part resistance ?\n3 - Increase your poison's potency ? \n";
+        cout << "4 - Dodge ?\n5 - Check a part's status\n6 - Change Poison\n 7 - Flee\n ";
         do {
             cin >> choice;
             switch (choice) //Le switch qui détermine ce que tu fais pendant ton tour
             {
             case 1:
                 lineBreak();
-                leftArm.mLife -= leftArm.poisonStatus(selected[0]);
+                partSelected = partSelection(body);
+                body[partSelected].mLife -= body[partSelected].poisonStatus(poisonSelect[0]);
                 cout << "\n";
                 break;
             case 2:
                 lineBreak();
                cout<<"You increase the chance of your poison taking hold\n";
-                leftArm.mPoisonResistance -= weaken();
+               partSelected = partSelection(body);
+               body[partSelected].mPoisonResistance -= weaken();
                 cout << "\n";
                 break;
             case 3:
                 lineBreak();
-                selected[0].mPoisonDamage++;
+                poisonSelect[0].mPoisonDamage++;
                 cout << "Your poison will kill the beast faster !\n";
                 break;
             case 4:
@@ -95,26 +119,28 @@ int main()
                 break;
             case 5:
                 lineBreak();
-                leftArm.displayInfo(dodgeChance);
+                partSelected = partSelection(body);
+                body[partSelected].displayInfo(dodgeChance);
                 choice = 0;
 
             case 6:
                 lineBreak();
-                for ( Items* item : inventory)
-                {
-                    if (Poison* poison = dynamic_cast<Poison*>(inventory))
-                    cin >> choice;
-                 
-                }
+                inventory.changePoison();
+                choice = 0;
 
             default:
-                cout << "What will you do ? \n1 - Attempt to poison the beast ? \n2 - Lower the beast resistance ? \n3 - Increase your poison's potency ? \n4 - Dodge ?\n5 - Check the beast's statue\n";
+                cout << "What will you do ? \n1 - Attempt to poison the beast ? \n2 - Lower the beast resistance ? \n3 - Increase your poison's potency ? \n4 - Dodge ?\n5 - Check the beast's statue\n6 - Change Poison\7 - Flee";
                 choice = 0;
             }
         } while (choice == 0);
 #pragma endregion   
 #pragma region enemyTurn
-        if (leftArm.mCanPlay) { playerLife -= leftArm.attackBasic(dodgeChance); }
+        
+        for (BodyPart part : body)
+        {
+            if (part.mLife <= 0) { part.mCanPlay = false; }
+            if (part.mCanPlay) { playerLife -= part.attackBasic(dodgeChance); }
+        }
 #pragma endregion
         
         lineBreak();
