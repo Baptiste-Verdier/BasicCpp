@@ -4,12 +4,16 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <vector>
 #include "BodyPart.h";
+#include "Poison.h"
 #include "Enum.h";
+
 using std::cout;
 using std::cin;
 using std::string;
 using std::map;
+using std::vector;
 
 
 
@@ -30,60 +34,78 @@ int main()
 #pragma region MAIN PROJECT
     srand(time(NULL));
    
-    int poisonDamage = 1; //Dégât qu'une cible empoisonner subit chaque tour
+   
     int playerLife = 50;
     int choice = 0; //La variable utilisé pour naviguer le switch
     int dodgeChance = 50; //La chance d'éviter les attaques de l'ennemi
    
 
     //CLASS OBJECT
-    BodyPart dog;
+    BodyPart leftArm("left arm", 75,20,3,75);
+    Poison basePoison("Poison Basique", 1, 100,10, "None");
+    Poison paralysingPoison("Poison Paralysant", 0, 75,10, "Paralysis");
+    Items apple("apple", 10);
+    vector<Items> inventory;
 
-
+    inventory.push_back(apple);
+    inventory.push_back(basePoison);
+    inventory.push_back(paralysingPoison);
+    Poison selected[]{ paralysingPoison };
 
     cout << "You're a peaceful plague doctor on a path to the woods when you encounter a wolf, you must fight ";
     lineBreak();
-    while (dog.mLife > 0 && playerLife > 0) //Tant que l'un de vous est vivant
+    while (leftArm.mLife > 0 && playerLife > 0) //Tant que l'un de vous est vivant
     {
     #pragma region turnStart 
        
-        if (dog.mIsPoisoned) { dog.mLife -= dog.poisonStatus(poisonDamage); }
-        dodgeChance = 0;
+        if (leftArm.mIsPoisoned) { leftArm.mLife -= leftArm.poisonStatus(selected[0]); }
+       
         cout << "You have " << playerLife << " life remaining\n";
-        cout << "Your poison has a potency of " << poisonDamage << "\n";
+        cout << "Your poison has a potency of " << selected[0].mPoisonDamage << "\n";
         lineBreak();
 #pragma endregion
 #pragma region yourTurn
-        cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n4 - Dodge ?\n5 - Check the beast's statue\n";
+        dodgeChance = 0;
+        cout << "What will you do ?\n1 - Attempt to poison the beast?\n2 - Lower the beast resistance ?\n3 - Increase your poison's potency ? \n";
+        cout << "4 - Dodge ?\n5 - Check the beast's statue\n6 - Change Poison";
         do {
             cin >> choice;
             switch (choice) //Le switch qui détermine ce que tu fais pendant ton tour
             {
             case 1:
                 lineBreak();
-                dog.mLife -= dog.poisonStatus(poisonDamage);
+                leftArm.mLife -= leftArm.poisonStatus(selected[0]);
                 cout << "\n";
                 break;
             case 2:
                 lineBreak();
                cout<<"You increase the chance of your poison taking hold\n";
-                dog.mPoisonResistance -= weaken();
+                leftArm.mPoisonResistance -= weaken();
                 cout << "\n";
                 break;
             case 3:
                 lineBreak();
-                poisonDamage++;
+                selected[0].mPoisonDamage++;
                 cout << "Your poison will kill the beast faster !\n";
                 break;
             case 4:
                 lineBreak();
-                dodgeChance += 65;
+                dodgeChance += 50;
                 cout << "You decrease the chance of the beast striking you\n";
                 break;
             case 5:
                 lineBreak();
-                dog.displayInfo(dodgeChance);
+                leftArm.displayInfo(dodgeChance);
                 choice = 0;
+
+            case 6:
+                lineBreak();
+                for ( Items* item : inventory)
+                {
+                    if (Poison* poison = dynamic_cast<Poison*>(inventory))
+                    cin >> choice;
+                 
+                }
 
             default:
                 cout << "What will you do ? \n1 - Attempt to poison the beast ? \n2 - Lower the beast resistance ? \n3 - Increase your poison's potency ? \n4 - Dodge ?\n5 - Check the beast's statue\n";
@@ -92,13 +114,13 @@ int main()
         } while (choice == 0);
 #pragma endregion   
 #pragma region enemyTurn
-        playerLife -= dog.attackBasic(dodgeChance);
+        if (leftArm.mCanPlay) { playerLife -= leftArm.attackBasic(dodgeChance); }
 #pragma endregion
         
         lineBreak();
     }
 
-    if (dog.mLife <= 0) { cout << "You're victorious !"; }
+    if (leftArm.mLife <= 0) { cout << "You're victorious !"; }
     else if (playerLife <= 0) { cout << "Oupsy, you died"; }
 
 #pragma endregion

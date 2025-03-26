@@ -1,27 +1,41 @@
 #include <iostream>
 #include <string>
 #include "BodyPart.h"
+#include "Poison.h"
 
 using std::cout;
 
-BodyPart::BodyPart() :
-    mName{ "Dog" },
-    mPoisonResistance{ 50 },
-    mAttackMod{ 1 },
-    mAttackChance{ 50 },
+
+
+
+BodyPart::BodyPart(string name, int poisonResistance, int maxLife, int attackMod, int attackChance) :
+    
+    mBaseHealingChance{ 10 },
+    mName{ name },
+    mPoisonResistance{ poisonResistance },
+    mMaxLife{ maxLife },
+    mLife{ maxLife },
+    mAttackMod(attackMod),
+    mAttackChance(attackChance),
     mIsPoisoned{ false },
-    mHealingChance{ 10 },
-    mMaxLife(10) {mLife = mMaxLife;}
+    mCanPlay{true}
+{
+    mHealingChance = mBaseHealingChance;
+}
+BodyPart::BodyPart() :
+   
+    mBaseHealingChance{10},
+    mMaxLife{30}
+{
+    mLife = mMaxLife;
+    mHealingChance = mBaseHealingChance;
+}
+
     
    
 int BodyPart::attackBasic(int dodgeChance) const
 {
-    if ( mAttackChance - dodgeChance <= 0) 
-    {
-        cout << "You avoid the beasts fang"; return 0;
-       
-    }
-    else if ((rand() % 100) + 1 >= mAttackChance - dodgeChance)
+    if ((rand() % 100) + 1 <= mAttackChance - dodgeChance)
     {
         cout << "The beast has struck you !";
         return (rand() % 5) + 1 + mAttackMod;
@@ -29,20 +43,21 @@ int BodyPart::attackBasic(int dodgeChance) const
     else { cout << "You avoid the beasts fang"; return 0; }
 }
 
-int BodyPart::poisonStatus( int poisonDamage) 
+int BodyPart::poisonStatus(Poison poison) 
 {
-    if (mIsPoisoned || (rand() % 100) + 1 >= mPoisonResistance)
+    if (mIsPoisoned || (rand() % 100) + 1 >= poison.mPoisonChance - mPoisonResistance)
     {
         cout << "The target suffers from poisoning\n";
         mIsPoisoned = true;
+        if (poison.mType == "Paralysis") { mCanPlay = false; }
         if (rand() % 100 + 1 <= mHealingChance) 
             {
             cout << "But heals from the poison afterwards";
-            mHealingChance = 10;
+            mHealingChance = mBaseHealingChance;
             mIsPoisoned = false;
             }
         else { mHealingChance += 5; }
-        return poisonDamage;
+        return poison.mPoisonDamage;
     }
     else { cout << "You failed to poison the target"; return 0; }
 }
@@ -58,6 +73,7 @@ void BodyPart::displayInfo(int dodgeChance) const
     { 
         cout << "It has a " << mHealingChance << "% to cure itself from the poison next turn\n";
         cout << "It is poisoned\n"; 
+
     } 
     else 
     { 

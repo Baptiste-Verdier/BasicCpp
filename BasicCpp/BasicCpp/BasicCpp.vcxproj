@@ -129,10 +129,14 @@
   <ItemGroup>
     <ClCompile Include="BasicCpp.cpp" />
     <ClCompile Include="BodyPart.cpp" />
+    <ClCompile Include="Items.cpp" />
+    <ClCompile Include="Poison.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BodyPart.h" />
     <ClInclude Include="Enum.h" />
+    <ClInclude Include="Items.h" />
+    <ClInclude Include="Poison.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
