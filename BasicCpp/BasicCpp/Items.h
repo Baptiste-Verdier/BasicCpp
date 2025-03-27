@@ -6,9 +6,12 @@ class Items
 public :
 	Items();
 	Items(string name, int price);
-	string mName;
 	virtual ~Items();
-private :
+	void GetName() const;
+	void GetPrice() const;
+
+protected :
 	int const mPrice;
+	string mName;
 };
 

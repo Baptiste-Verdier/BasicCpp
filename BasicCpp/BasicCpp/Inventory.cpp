@@ -9,29 +9,27 @@ using std::vector;
 using std::cout;
 
 Inventory::Inventory():
-	mItems{ mPoison}
+	mItems{ mPoison},
+	mItemsPtr{ &mItems },
+	mMoney{ 0 }
 { }
 
 void Inventory::changePoison()const  
 
 {
 	int option = 1;
-		
-
-		
-	for ( Items item : mItems ) // Je considère la variable poison déclaré ici, mItems est un vecteur d'Items
+	for ( Items& item : *mItemsPtr ) 
 	{
 		Items* pItem = &item;
-		
+		Poison* pPoison = dynamic_cast<Poison*>(pItem);
 
-		Poison* pIsPoison = dynamic_cast<Poison*>(pItem);
-		
-
-		//if (pIsPoison) //Je verifie si l'Item est de type Poison
-		//{
-		//	cout << option << " - " << item.mName << "\n";
-		//	option++;
-		//}
-		/*else { cout << pIsPoison << "\n"; }*/
+		if (pPoison)
+		{
+			Items poison = *pItem;
+			cout << option << " - "; 
+			poison.GetName();
+			option++;
+		}
+		else { cout << pPoison << "\n"; }
 	}
 }

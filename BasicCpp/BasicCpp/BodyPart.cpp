@@ -42,29 +42,34 @@ int BodyPart::attackBasic(int dodgeChance) const
 {
     if ((rand() % 100) + 1 <= mAttackChance - dodgeChance)
     {
-        cout << "The beast has struck you !";
+        cout << "The " << mName << " has struck you !\n";
         return (rand() % 5) + 1 + mAttackMod;
     }
-    else { cout << "You avoid the beasts fang"; return 0; }
+    else {
+        cout << "You avoid the " << mName << "'s attack\n"; return 0; }
 }
 
 int BodyPart::poisonStatus(Poison poison) 
 {
-    if (mIsPoisoned || (rand() % 100) + 1 >= poison.mPoisonChance - mPoisonResistance)
+    if (mIsPoisoned || (rand() % 100) + 1 <= poison.mPoisonChance - mPoisonResistance)
     {
-        cout << "The target suffers from poisoning\n";
+        cout << "The " << mName << " suffers from poisoning";
         mIsPoisoned = true;
         if (poison.mType == "Paralysis") { mCanPlay = false; }
         if (rand() % 100 + 1 <= mHealingChance) 
             {
-            cout << "But heals from the poison afterwards";
+            cout << " but heals from the poison afterwards\n";
             mHealingChance = mBaseHealingChance;
             mIsPoisoned = false;
             }
-        else { mHealingChance += 5; }
+        else
+        {
+            cout << "\n";
+            mHealingChance += 5;
+        }
         return poison.mPoisonDamage;
     }
-    else { cout << "You failed to poison the target"; return 0; }
+    else { cout << "You failed to poison the " << mName << "\n"; return 0; }
 }
 
 void BodyPart::displayInfo(int dodgeChance) const 

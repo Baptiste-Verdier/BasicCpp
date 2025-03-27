@@ -14,6 +14,7 @@ public:
 	Items selected[1];
 	void changePoison() const;
 	void buy(Items bought) const;
+	vector<Items>* mItemsPtr;
 	
 private: 
 	Items mPoison;
