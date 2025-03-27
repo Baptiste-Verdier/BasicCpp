@@ -1,35 +1,38 @@
 #include "Inventory.h"
 #include "Items.h"
-#include "Poison.h"
 #include <iostream>
 
 #include <vector>
 using std::vector;
-
 using std::cout;
+using std::cin;
 
 Inventory::Inventory():
-	mItems{ mPoison},
-	mItemsPtr{ &mItems },
+	mItems{ },
 	mMoney{ 0 }
 { }
 
-void Inventory::changePoison()const  
-
+Poison* Inventory::changePoison() const
 {
+	bool isChoiceValid = false;
 	int option = 1;
-	for ( Items& item : *mItemsPtr ) 
+	int choice = 0;
+	vector<Poison*> poisonOptions;
+	for ( Items* item : mItems ) 
 	{
-		Items* pItem = &item;
-		Poison* pPoison = dynamic_cast<Poison*>(pItem);
-
-		if (pPoison)
+		if (Poison* pPoison = dynamic_cast<Poison*>(item))
 		{
-			Items poison = *pItem;
+			poisonOptions.push_back(pPoison);
 			cout << option << " - "; 
-			poison.GetName();
+			pPoison->GetName();
 			option++;
+			
 		}
-		else { cout << pPoison << "\n"; }
+	}
+	while (isChoiceValid == false)
+	{
+		cin >> choice;
+		if (choice - 1 <= poisonOptions.size() && choice - 1 >= 0) { return poisonOptions[choice - 1]; }
+		return poisonOptions[0];
 	}
 }

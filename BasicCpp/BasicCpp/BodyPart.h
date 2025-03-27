@@ -23,7 +23,7 @@ public:
 	bool mCanPlay;
 
 	int attackBasic(int dodgeChance) const;
-	int poisonStatus(Poison poison);
+	int poisonStatus(Poison* poison);
 	void displayInfo(int dodgeChance) const;
 
 };

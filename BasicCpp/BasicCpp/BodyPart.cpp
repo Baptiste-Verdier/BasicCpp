@@ -12,13 +12,13 @@ int const BodyPart::mBaseHealingChance = 10;
 BodyPart::BodyPart(string name, int poisonResistance, int maxLife, int attackMod, int attackChance) :
     
     
-    mName{ name },
-    mPoisonResistance{ poisonResistance },
-    mMaxLife{ maxLife },
-    mLife{ maxLife },
+    mName{name},
+    mPoisonResistance{poisonResistance},
+    mMaxLife{maxLife},
+    mLife{maxLife},
     mAttackMod(attackMod),
     mAttackChance(attackChance),
-    mIsPoisoned{ false },
+    mIsPoisoned{false},
     mCanPlay{true}
 {
     mHealingChance = mBaseHealingChance;
@@ -28,8 +28,8 @@ BodyPart::BodyPart() :
     mPoisonResistance{75},
     mAttackMod{1},
     mAttackChance{50},
-    mIsPoisoned{ false },
-    mCanPlay{ true },
+    mIsPoisoned{false},
+    mCanPlay{true},
     mMaxLife{30}
 {
     mLife = mMaxLife;
@@ -49,13 +49,13 @@ int BodyPart::attackBasic(int dodgeChance) const
         cout << "You avoid the " << mName << "'s attack\n"; return 0; }
 }
 
-int BodyPart::poisonStatus(Poison poison) 
+int BodyPart::poisonStatus(Poison* poison) 
 {
-    if (mIsPoisoned || (rand() % 100) + 1 <= poison.mPoisonChance - mPoisonResistance)
+    if (mIsPoisoned || (rand() % 100) + 1 <= poison->mPoisonChance - mPoisonResistance)
     {
         cout << "The " << mName << " suffers from poisoning";
         mIsPoisoned = true;
-        if (poison.mType == "Paralysis") { mCanPlay = false; }
+        if (poison->mType == "Paralysis") { mCanPlay = false; }
         if (rand() % 100 + 1 <= mHealingChance) 
             {
             cout << " but heals from the poison afterwards\n";
@@ -67,7 +67,7 @@ int BodyPart::poisonStatus(Poison poison)
             cout << "\n";
             mHealingChance += 5;
         }
-        return poison.mPoisonDamage;
+        return poison->mPoisonDamage;
     }
     else { cout << "You failed to poison the " << mName << "\n"; return 0; }
 }
